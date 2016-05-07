@@ -34,21 +34,21 @@ class authforurl_module
 
 		//convert the string to an array
 		$authurl_array = explode(',', trim($authforurl_data['authforurl_tlds']));
-		
+
 		//sort the array
 		sort($authurl_array);
-		
+
 		// put the array back into a string
 		$tlds = implode(',', $authurl_array);
-		
+
 		if ($request->is_set_post('submit'))
 		{
 			if (!check_form_key($form_name))
 			{
 				$error = $user->lang('FORM_INVALID');
-			}			
+			}
 
-			if  (empty($error) && $request->is_set_post('submit'))
+			if (empty($error) && $request->is_set_post('submit'))
 			{
 				$config->set('authforurl_img_bbcode', $request->variable('authforurl_img_bbcode', false));
 				$config->set('authforurl_email', $request->variable('authforurl_email', false));

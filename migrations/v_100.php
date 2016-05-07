@@ -99,7 +99,7 @@ class v_100 extends \phpbb\db\migration\migration
 			'zm','zr','zw',
 		);
 		$tlds = implode(",", $tlds);
-		
+
 		return $tlds;
-	}	
+	}
 }
