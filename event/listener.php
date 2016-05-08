@@ -29,26 +29,16 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var string phpBB root path */
-	protected $root_path;
-
-	/** @var string phpEx */
-	protected $php_ext;
-
 	public function __construct(
 		\phpbb\auth\auth $auth,
 		\phpbb\config\config $config,
 		\phpbb\config\db_text $config_text,
-		\phpbb\user $user,
-		$root_path,
-		$php_ext)
+		\phpbb\user $user)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
 		$this->config_text = $config_text;
 		$this->user = $user;
-		$this->root_path = $root_path;
-		$this->php_ext = $php_ext;
 	}
 
 	/**
@@ -94,8 +84,8 @@ class listener implements EventSubscriberInterface
 			// initialize a variable or two
 			$auth_msg = $type = '';
 
-			// The following will allow img bbcode and email links to be overridden
-			// eg if $not_check_email = true, then emails (eg rmcgirr83@rmcgirr83.org, etc)
+			// The following will allow img bbcode and email links to not be checked per the setting in the ACP
+			// eg if $check_email = false, then emails (eg rmcgirr83@rmcgirr83.org, etc)
 			// will not be checked for
 
 			$check_email = $this->config['authforurl_email'];
