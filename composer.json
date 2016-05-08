@@ -28,5 +28,8 @@
         "soft-require": {
             "phpbb/phpbb": ">=3.1.10-RC1,<3.3.0"
         }
-    }
+    },
+    "config": {
+        "disable-tls": true
+    }	
 }
