@@ -98,7 +98,9 @@ class v_100 extends \phpbb\db\migration\migration
 			'vu','web','wf','ws','ye','yt','yu','za',
 			'zm','zr','zw',
 		);
-		$tlds = implode(",", $tlds);
+
+		//convert the array into a string for insertion into database
+		$tlds = implode(',', $tlds);
 
 		return $tlds;
 	}
