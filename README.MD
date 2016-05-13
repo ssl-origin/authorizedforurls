@@ -3,6 +3,7 @@ Authorized for URLs
 
 phpBB 3.1 extension that adds a new group/user permission which allows you to specify specific groups/users to allow the posting of url links.
 
+![Screenshot](denied.jpg)
 
 [![Build Status](https://travis-ci.org/rmcgirr83/authorizedforurls.svg?branch=master)](https://travis-ci.org/rmcgirr83/authorizedforurls)
 ## Installation
