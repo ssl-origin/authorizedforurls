@@ -95,44 +95,48 @@ class listener implements EventSubscriberInterface
 				'authforurl_tlds',
 			));
 
-			//convert the string to an array
-			$tld_list = explode(',', trim($tld_list['authforurl_tlds']));
-
-			//convert the array back into a string
-			$disallowed_tld = implode('|',$tld_list);
-
-			// thanks for the regex tut A_Jelly_Doughnut!! :)
-			// we want emails to show
-			if (!$check_email)
+			// we only run this if we have something in the tld_list variable
+			if (!empty($tld_list['authforurl_tlds']))
 			{
-				$check_text = preg_replace("#([a-z0-9\-_]+)@(((?:www.)?\b[a-z0-9\-_]+)\.($disallowed_tld)(\.($disallowed_tld))?\b)#i",'',$check_text);
-			}
-			// we want img bbcode tags to show
-			if (!$check_img_bbcode)
-			{
-				$check_text = preg_replace("/\[img\s*\](.+?)\[\/img\]/i", '',$check_text);
-			}
-			// check the whole darn thang now for any TLD's
-			// at least those that >seem< to match from the array
-			// and have not been excluded above
+				//convert the string to an array
+				$tld_list = explode(',', trim($tld_list['authforurl_tlds']));
 
-			preg_match("#(([a-z0-9\-_]+)@)?([a-z]{3,6}://)?(((?:www.)?\b[a-z0-9\-_]+)\.($disallowed_tld)(\.($disallowed_tld))?\b)#i", $check_text, $match);
+				//convert the array back into a string
+				$disallowed_tld = implode('|',$tld_list);
 
-			// we have a match..uhoh, someone's being naughty
-			// time to slap 'em up side the head
-			if (sizeof($match))
-			{
-				if ($check_img_bbcode)
+				// thanks for the regex tut A_Jelly_Doughnut!! :)
+				// we want emails to show
+				if (!$check_email)
 				{
-					$type .= $this->user->lang('AUTHED_IMAGES');
+					$check_text = preg_replace("#([a-z0-9\-_]+)@(((?:www.)?\b[a-z0-9\-_]+)\.($disallowed_tld)(\.($disallowed_tld))?\b)#i",'',$check_text);
 				}
-				if ($check_email)
+				// we want img bbcode tags to show
+				if (!$check_img_bbcode)
 				{
-					$type .= ',&nbsp;' .  $this->user->lang('AUTHED_EMAIL');
+					$check_text = preg_replace("/\[img\s*\](.+?)\[\/img\]/i", '',$check_text);
 				}
-				$type .= !empty($type) ? '&nbsp;' . $this->user->lang('AUTHED_OR') . '&nbsp;' . $this->user->lang('AUTHED_URL') : $this->user->lang('AUTHED_URL');
-				$auth_msg = $this->user->lang('URL_UNAUTHED', $type, $match[0]);
-				$message->warn_msg[] = $auth_msg;
+				// check the whole darn thang now for any TLD's
+				// at least those that >seem< to match from the array
+				// and have not been excluded above
+
+				preg_match("#(([a-z0-9\-_]+)@)?([a-z]{3,6}://)?(((?:www.)?\b[a-z0-9\-_]+)\.($disallowed_tld)(\.($disallowed_tld))?\b)#i", $check_text, $match);
+
+				// we have a match..uhoh, someone's being naughty
+				// time to slap 'em up side the head
+				if (sizeof($match))
+				{
+					if ($check_img_bbcode)
+					{
+						$type .= $this->user->lang('AUTHED_IMAGES');
+					}
+					if ($check_email)
+					{
+						$type .= ',&nbsp;' .  $this->user->lang('AUTHED_EMAIL');
+					}
+					$type .= !empty($type) ? '&nbsp;' . $this->user->lang('AUTHED_OR') . '&nbsp;' . $this->user->lang('AUTHED_URL') : $this->user->lang('AUTHED_URL');
+					$auth_msg = $this->user->lang('URL_UNAUTHED', $type, $match[0]);
+					$message->warn_msg[] = $auth_msg;
+				}
 			}
 
 			$event['message_parser'] = $message;
