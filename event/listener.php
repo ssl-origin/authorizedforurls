@@ -103,12 +103,12 @@ class listener implements EventSubscriberInterface
 
 			// thanks for the regex tut A_Jelly_Doughnut!! :)
 			// we want emails to show
-			if(!$check_email)
+			if (!$check_email)
 			{
 				$check_text = preg_replace("#([a-z0-9\-_]+)@(((?:www.)?\b[a-z0-9\-_]+)\.($disallowed_tld)(\.($disallowed_tld))?\b)#i",'',$check_text);
 			}
 			// we want img bbcode tags to show
-			if(!$check_img_bbcode)
+			if (!$check_img_bbcode)
 			{
 				$check_text = preg_replace("/\[img\s*\](.+?)\[\/img\]/i", '',$check_text);
 			}
