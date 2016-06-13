@@ -38,6 +38,11 @@ class v_100 extends \phpbb\db\migration\migration
 			array('permission.permission_set',array('ROLE_USER_NEW_MEMBER','u_post_url','role',false)),
 			array('permission.permission_set',array('ROLE_USER_STANDARD','u_post_url','role')),
 			array('permission.permission_set',array('ROLE_USER_FULL','u_post_url','role')),
+			array('permission.permission_set',array('ROLE_ADMIN_STANDARD','u_post_url','role')),
+			array('permission.permission_set',array('ROLE_ADMIN_FORUM','u_post_url','role')),
+			array('permission.permission_set',array('ROLE_ADMIN_FULL','u_post_url','role')),
+			array('permission.permission_set',array('ROLE_MOD_STANDARD','u_post_url','role')),
+			array('permission.permission_set',array('ROLE_MOD_FULL','u_post_url','role')),
 
 			array('config_text.add', array('authforurl_tlds', $this->tlds())),
 			array('config.add', array('authforurl_img_bbcode', true)),
@@ -98,10 +103,8 @@ class v_100 extends \phpbb\db\migration\migration
 			'vu','web','wf','ws','ye','yt','yu','za',
 			'zm','zr','zw',
 		);
-
-		//convert the array into a string for insertion into database
-		$tlds = implode(',', $tlds);
-
+		$tlds = implode(",", $tlds);
+		
 		return $tlds;
 	}
 }

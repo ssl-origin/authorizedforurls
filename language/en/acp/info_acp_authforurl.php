@@ -23,11 +23,4 @@ $lang = array_merge($lang, array(
 	// ACP
 	'AFU_ACP_TITLE'			=> 'Authorized for urls',
 	'AFU_CONFIG'			=> 'Settings',
-	'AFU_IMAGE_BBCODE'		=> 'Check image bbcode',
-	'AFU_IMAGE_BBCODE_EXPLAIN'	=> 'If set yes, then urls within the img bbcode will be checked.',
-	'AFU_EMAIL'				=> 'Check email links',
-	'AFU_EMAIL_EXPLAIN'		=> 'If set yes, links with email addresses will be checked',
-	'AFU_TLDS'				=> 'The TLD’s to check for',
-	'AFU_TLDS_EXPLAIN'		=> 'The TLDs to include, seperated by a comma (Example: com,de).  Add to or remove from to suit your needs',
-	'AFU_SAVED'				=> 'Changes Saved',
 ));

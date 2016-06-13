@@ -20,6 +20,7 @@ class authforurl_module
 		global $user, $request, $template;
 		global $config, $phpbb_root_path, $phpEx, $phpbb_container;
 
+		$user->add_lang_ext('rmcgirr83/authorizedforurls', 'acp_authforurl');
 		$this->tpl_name = 'acp_authforurl';
 		$this->page_title = $user->lang['AFU_ACP_TITLE'];
 		$form_name = 'acp_afu';
