@@ -74,20 +74,36 @@ class listener implements EventSubscriberInterface
 
 	public function modify_message_text($event)
 	{
-		if (!$this->auth->acl_get('u_post_url') && ($event['submit'] || $event['preview']))
+		if ($event['submit'] || $event['preview'])
 		{
-
-			$this->user->add_lang_ext('rmcgirr83/authorizedforurls', 'common');
 			$message = $event['message_parser'];
 			$check_text = $message->message;
+			$message->warn_msg[] = $this->check_text($check_text);
+			$event['message_parser'] = $message;
+		}
+	}
 
+	public function modify_signature($event)
+	{
+		if ($event['submit'] || $event['preview'])
+		{
+			$check_text = $event['signature'];
+			$error = $event['error'];
+			$error[] = $this->check_text($check_text);
+			$event['error'] = $error;
+		}
+	}
+
+	private function check_text($check_text)
+	{
+		if (!$this->auth->acl_get('u_post_url'))
+		{
 			// initialize a variable or two
 			$auth_msg = $type = '';
 
 			// The following will allow img bbcode and email links to not be checked per the setting in the ACP
 			// eg if $check_email = false, then emails (eg rmcgirr83@rmcgirr83.org, etc)
 			// will not be checked for
-
 			$check_email = $this->config['authforurl_email'];
 			$check_img_bbcode = $this->config['authforurl_img_bbcode'];
 
@@ -115,7 +131,6 @@ class listener implements EventSubscriberInterface
 			// check the whole darn thang now for any TLD's
 			// at least those that >seem< to match from the array
 			// and have not been excluded above
-
 			preg_match("#(([a-z0-9\-_]+)@)?([a-z]{3,6}://)?(((?:www.)?\b[a-z0-9\-_]+)\.($disallowed_tld)(\.($disallowed_tld))?\b)#i", $check_text, $match);
 
 			// we have a match..uhoh, someone's being naughty
