@@ -33,12 +33,14 @@ class listener implements EventSubscriberInterface
 		\phpbb\auth\auth $auth,
 		\phpbb\config\config $config,
 		\phpbb\config\db_text $config_text,
-		\phpbb\user $user)
+		\phpbb\user $user,
+		\rmcgirr83\topicdescription\event\listener $topicdescription = null)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
 		$this->config_text = $config_text;
 		$this->user = $user;
+		$this->topicdescription = $topicdescription;
 	}
 
 	/**
@@ -55,6 +57,8 @@ class listener implements EventSubscriberInterface
 			'core.posting_modify_message_text'		=> 'modify_message_text',
 			'core.ucp_profile_modify_signature'		=> 'modify_signature',
 			'core.ucp_pm_compose_modify_private_message'	=> 'modify_message_text',
+			// for topic description extension
+			'core.posting_modify_submission_errors' => 'modify_submission_errors',
 		);
 	}
 
@@ -78,7 +82,10 @@ class listener implements EventSubscriberInterface
 		{
 			$message = $event['message_parser'];
 			$check_text = $message->message;
-			$message->warn_msg[] = $this->check_text($check_text);
+			if ($this->check_text($check_text))
+			{
+				$message->warn_msg[] = $this->check_text($check_text);
+			}
 			$event['message_parser'] = $message;
 		}
 	}
@@ -87,9 +94,27 @@ class listener implements EventSubscriberInterface
 	{
 		if ($event['submit'] || $event['preview'])
 		{
-			$check_text = $event['signature'];
 			$error = $event['error'];
-			$error[] = $this->check_text($check_text);
+			$check_text = $event['signature'];
+			if ($this->check_text($check_text))
+			{
+				$error[] = $this->check_text($check_text);
+			}
+			$event['error'] = $error;
+		}
+	}
+
+	public function modify_submission_errors($event)
+	{
+
+		$topic_desc = ($this->topicdescription !== null) ? $event['post_data']['topic_desc'] : '';
+		if (!empty($topic_desc))
+		{
+			$error = $event['error'];
+			if ($this->check_text($topic_desc))
+			{
+				$error[] = $this->check_text($topic_desc);
+			}
 			$event['error'] = $error;
 		}
 	}
@@ -152,5 +177,7 @@ class listener implements EventSubscriberInterface
 
 			return $auth_msg;
 		}
+
+		return;
 	}
 }
