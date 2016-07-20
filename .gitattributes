@@ -4,6 +4,7 @@
 .editorconfig export-ignore
 *README.MD export-ignore
 denied.jpg export-ignore
+travis export-ignore
 
 # Auto detect text files and perform LF normalization
 * text=false
