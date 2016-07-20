@@ -81,10 +81,10 @@ class listener implements EventSubscriberInterface
 		if ($event['submit'] || $event['preview'])
 		{
 			$message = $event['message_parser'];
-			$check_text = $message->message;
-			if ($this->check_text($check_text))
+			$check_text = $this->check_text($message->message);
+			if (!empty($check_text))
 			{
-				$message->warn_msg[] = $this->check_text($check_text);
+				$message->warn_msg[] = $check_text;
 			}
 			$event['message_parser'] = $message;
 		}
@@ -95,10 +95,10 @@ class listener implements EventSubscriberInterface
 		if ($event['submit'] || $event['preview'])
 		{
 			$error = $event['error'];
-			$check_text = $event['signature'];
-			if ($this->check_text($check_text))
+			$check_text = $this->check_text($event['signature']);
+			if (!empty($check_text))
 			{
-				$error[] = $this->check_text($check_text);
+				$error[] = $check_text;
 			}
 			$event['error'] = $error;
 		}
@@ -111,9 +111,10 @@ class listener implements EventSubscriberInterface
 		if (!empty($topic_desc))
 		{
 			$error = $event['error'];
-			if ($this->check_text($topic_desc))
+			$check_text = $this->check_text($topic_desc);
+			if (!empty($check_text))
 			{
-				$error[] = $this->check_text($topic_desc);
+				$error[] = $check_text;
 			}
 			$event['error'] = $error;
 		}
