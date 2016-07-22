@@ -170,9 +170,9 @@ class listener implements EventSubscriberInterface
 				}
 				if ($check_email)
 				{
-					$type .= ',&nbsp;' .  $this->user->lang('AUTHED_EMAIL');
+					$type .= (!empty($type)) ? ', ' .  $this->user->lang('AUTHED_EMAIL') : $this->user->lang('AUTHED_EMAIL');
 				}
-				$type .= !empty($type) ? '&nbsp;' . $this->user->lang('AUTHED_OR') . '&nbsp;' . $this->user->lang('AUTHED_URL') : $this->user->lang('AUTHED_URL');
+				$type .= (!empty($type)) ? ' ' . $this->user->lang('AUTHED_OR') . ' ' . $this->user->lang('AUTHED_URL') : $this->user->lang('AUTHED_URL');
 				$auth_msg = $this->user->lang('URL_UNAUTHED', $type, $match[0]);
 			}
 
