@@ -59,6 +59,7 @@ class listener implements EventSubscriberInterface
 			'core.ucp_pm_compose_modify_private_message'	=> 'modify_message_text',
 			// for topic description extension
 			'core.posting_modify_submission_errors' => 'modify_submission_errors',
+			'core.modify_submit_post_data'		=> 'modify_submit_post_data',
 		);
 	}
 
@@ -84,7 +85,10 @@ class listener implements EventSubscriberInterface
 			$check_text = $this->check_text($message->message);
 			if (!empty($check_text))
 			{
-				$message->warn_msg[] = $check_text;
+				if ($this->config['authforurl_deny_post'])
+				{
+					$message->warn_msg[] = $check_text;
+				}
 			}
 			$event['message_parser'] = $message;
 		}
@@ -114,7 +118,10 @@ class listener implements EventSubscriberInterface
 			$check_text = $this->check_text($topic_desc);
 			if (!empty($check_text))
 			{
-				$error[] = $check_text;
+				if ($this->config['authforurl_deny_post'])
+				{
+					$error[] = $check_text;
+				}
 			}
 			$event['error'] = $error;
 		}
@@ -180,5 +187,28 @@ class listener implements EventSubscriberInterface
 		}
 
 		return;
+	}
+
+	public function modify_submit_post_data($event)
+	{
+		if (isset($this->config['authforurl_deny_post']))
+		{
+			if (!$this->config['authforurl_deny_post'])
+			{
+				$data_array = $event['data'];
+				$mode = $event['mode'];
+
+				if (in_array($mode, array('post', 'reply', 'edit', 'quote')))
+				{
+					$data_array['force_approved_state'] = ITEM_UNAPPROVED;
+					if ($mode == 'edit')
+					{
+						$data_array['force_approved_state'] = ITEM_REAPPROVE;
+					}
+				}
+
+				$event['data'] = $data_array;
+			}
+		}
 	}
 }

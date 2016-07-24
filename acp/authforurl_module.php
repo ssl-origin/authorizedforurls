@@ -53,6 +53,7 @@ class authforurl_module
 			{
 				$config->set('authforurl_img_bbcode', $request->variable('authforurl_img_bbcode', false));
 				$config->set('authforurl_email', $request->variable('authforurl_email', false));
+				$config->set('authforurl_deny_post', $request->variable('authforurl_deny_post', true));
 				$authforurl_tlds = $request->variable('authforurl_tlds', '', true);
 				$config_text->set_array(array(
 					'authforurl_tlds'			=> $authforurl_tlds,
@@ -66,6 +67,7 @@ class authforurl_module
 			'ERRORS'			=> $error,
 			'AFU_BBCODE'		=> $config['authforurl_img_bbcode'],
 			'AFU_EMAIL'			=> $config['authforurl_email'],
+			'AFU_DENY_POST'		=> $config['authforurl_deny_post'],
 			'AFU_TLDS'			=> $tlds,
 
 			'U_ACTION'			=> $this->u_action,
