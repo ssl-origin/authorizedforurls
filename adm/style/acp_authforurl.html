@@ -22,6 +22,11 @@
 				<input type="radio" class="radio" name="authforurl_email" value="0" <!-- IF not AFU_EMAIL -->checked="checked"<!-- ENDIF --> /> {L_NO}</dd>
 		</dl>
 		<dl>
+			<dt><label id="authforurl_deny_post" for="authforurl_deny_post">{L_AFU_DENY_POST}</label><br />{L_AFU_DENY_POST_EXPLAIN}</dt>
+			<dd><input type="radio" class="radio" name="authforurl_deny_post" value="1" <!-- IF AFU_DENY_POST -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
+				<input type="radio" class="radio" name="authforurl_deny_post" value="0" <!-- IF not AFU_DENY_POST -->checked="checked"<!-- ENDIF --> /> {L_NO}</dd>
+		</dl>		
+		<dl>
 			<dt><label for="authforurl_tlds">{L_AFU_TLDS}{L_COLON}</label><br /><span>{L_AFU_TLDS_EXPLAIN}</span></dt>
 			<dd><textarea name="authforurl_tlds" rows="10" cols="60" style="width: 95%;">{AFU_TLDS}</textarea></dd>
 		</dl>

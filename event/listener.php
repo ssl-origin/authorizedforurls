@@ -54,12 +54,12 @@ class listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.permissions'						=> 'add_permission',
-			'core.posting_modify_message_text'		=> 'modify_message_text',
+			'core.posting_modify_message_text'		=> 'posting_modify_message_text',
+			'core.posting_modify_submit_post_before'	=> 'posting_modify_submit_post_before',
 			'core.ucp_profile_modify_signature'		=> 'modify_signature',
-			'core.ucp_pm_compose_modify_private_message'	=> 'modify_message_text',
+			'core.ucp_pm_compose_modify_parse_before'	=> 'modify_message_text',
 			// for topic description extension
 			'core.posting_modify_submission_errors' => 'modify_submission_errors',
-			'core.modify_submit_post_data'		=> 'modify_submit_post_data',
 		);
 	}
 
@@ -77,21 +77,40 @@ class listener implements EventSubscriberInterface
 		$event['permissions'] = $permissions;
 	}
 
-	public function modify_message_text($event)
+	public function posting_modify_message_text($event)
 	{
 		if ($event['submit'] || $event['preview'])
 		{
 			$message = $event['message_parser'];
 			$check_text = $this->check_text($message->message);
-			if (!empty($check_text))
+			if (!empty($check_text) && $this->config['authforurl_deny_post'])
 			{
-				if ($this->config['authforurl_deny_post'])
-				{
-					$message->warn_msg[] = $check_text;
-				}
+				$message->warn_msg[] = $check_text;
 			}
 			$event['message_parser'] = $message;
 		}
+	}
+
+	public function posting_modify_submit_post_before($event)
+	{
+		$mode = $event['mode'];
+		$data = $event['data'];
+		$message = $data['message'];
+		$check_text = $this->check_text($message);
+
+		if (!empty($check_text) && !$this->config['authforurl_deny_post'])
+		{
+			if (in_array($mode, array('post','quote','reply')))
+			{
+				$data['force_visibility'] = $data['force_approved_state'] = ITEM_UNAPPROVED;
+			}
+			else if ($mode == 'edit')
+			{
+				$data['force_visibility'] = ITEM_REAPPROVE;
+				$data['force_approved_state'] = ITEM_UNAPPROVED;
+			}
+		}
+		$event['data'] = $data;
 	}
 
 	public function modify_signature($event)
@@ -105,6 +124,20 @@ class listener implements EventSubscriberInterface
 				$error[] = $check_text;
 			}
 			$event['error'] = $error;
+		}
+	}
+
+	public function modify_message_text($event)
+	{
+		if ($event['submit'] || $event['preview'])
+		{
+			$message = $event['message_parser'];
+			$check_text = $this->check_text($message->message);
+			if (!empty($check_text))
+			{
+				$message->warn_msg[] = $check_text;
+			}
+			$event['message_parser'] = $message;
 		}
 	}
 
@@ -135,7 +168,7 @@ class listener implements EventSubscriberInterface
 			$auth_msg = $type = '';
 
 			// The following will allow img bbcode and email links to not be checked per the setting in the ACP
-			// eg if $check_email = false, then emails (eg rmcgirr83@rmcgirr83.org, etc)
+			// eg if $check_email = false, then emails (eg whatever@whatever.com, etc)
 			// will not be checked for
 			$check_email = $this->config['authforurl_email'];
 			$check_img_bbcode = $this->config['authforurl_img_bbcode'];
@@ -186,29 +219,6 @@ class listener implements EventSubscriberInterface
 			return $auth_msg;
 		}
 
-		return;
-	}
-
-	public function modify_submit_post_data($event)
-	{
-		if (isset($this->config['authforurl_deny_post']))
-		{
-			if (!$this->config['authforurl_deny_post'])
-			{
-				$data_array = $event['data'];
-				$mode = $event['mode'];
-
-				if (in_array($mode, array('post', 'reply', 'edit', 'quote')))
-				{
-					$data_array['force_approved_state'] = ITEM_UNAPPROVED;
-					if ($mode == 'edit')
-					{
-						$data_array['force_approved_state'] = ITEM_REAPPROVE;
-					}
-				}
-
-				$event['data'] = $data_array;
-			}
-		}
+		return false;
 	}
 }
