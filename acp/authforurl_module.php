@@ -18,7 +18,7 @@ class authforurl_module
 	{
 
 		global $user, $request, $template;
-		global $config, $phpbb_root_path, $phpEx, $phpbb_container;
+		global $config, $phpbb_container;
 
 		$user->add_lang_ext('rmcgirr83/authorizedforurls', 'acp_authforurl');
 		$this->tpl_name = 'acp_authforurl';
@@ -49,7 +49,7 @@ class authforurl_module
 				$error = $user->lang('FORM_INVALID');
 			}
 
-			if (empty($error) && $request->is_set_post('submit'))
+			if (empty($error))
 			{
 				$config->set('authforurl_img_bbcode', $request->variable('authforurl_img_bbcode', false));
 				$config->set('authforurl_email', $request->variable('authforurl_email', false));
