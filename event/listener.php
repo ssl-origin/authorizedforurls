@@ -83,9 +83,10 @@ class listener implements EventSubscriberInterface
 		{
 			$message = $event['message_parser'];
 			$check_text = $this->check_text($message->message);
-			if (!empty($check_text) && $this->config['authforurl_deny_post'])
+			$check_subject = $this->check_text($event['post_data']['post_subject']);
+			if ((!empty($check_text) || !empty($check_subject)) && $this->config['authforurl_deny_post'])
 			{
-				$message->warn_msg[] = $check_text;
+				$message->warn_msg[] = (!empty($check_text)) ? $check_text : $check_subject;
 			}
 			$event['message_parser'] = $message;
 		}
@@ -143,7 +144,6 @@ class listener implements EventSubscriberInterface
 
 	public function modify_submission_errors($event)
 	{
-
 		$topic_desc = ($this->topicdescription !== null) ? $event['post_data']['topic_desc'] : '';
 		if (!empty($topic_desc))
 		{
