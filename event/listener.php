@@ -194,6 +194,9 @@ class listener implements EventSubscriberInterface
 			{
 				$check_text = preg_replace("/\[img\s*\](.+?)\[\/img\]/i", '',$check_text);
 			}
+			// we want internal links removed
+			$check_text = preg_replace("/{$this->config['cookie_domain']}/", '',$check_text);
+
 			// check the whole darn thang now for any TLD's
 			// at least those that >seem< to match from the array
 			// and have not been excluded above
