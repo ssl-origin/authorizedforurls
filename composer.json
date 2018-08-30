@@ -2,14 +2,14 @@
     "name": "rmcgirr83/authorizedforurls",
     "type": "phpbb-extension",
     "description": "A new group/user permission which allows you to specify specific groups/users to allow the posting of url links.",
-    "version": "1.0.4",
-    "time": "2017-02-01",
+    "version": "1.0.5",
+    "time": "2018-08-30",
     "keywords": [
         "phpbb",
         "extension",
         "anti-spam"
     ],
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "authors": [
         {
             "name": "Rich McGirr",
