@@ -4,6 +4,7 @@
 * Authorized for urls extension for the phpBB Forum Software package.
 *
 * @copyright (c) 2016 Rich McGirr (RMcGirr83)
+* @copyright (c) 2018, kasimi, https://kasimi.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -160,13 +161,10 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	private function check_text($check_text)
+	public function check_text($check_text, $return_lang_args = false)
 	{
 		if (!$this->auth->acl_get('u_post_url'))
 		{
-			// initialize a variable or two
-			$auth_msg = $type = '';
-
 			// The following will allow img bbcode and email links to not be checked per the setting in the ACP
 			// eg if $check_email = false, then emails (eg whatever@whatever.com, etc)
 			// will not be checked for
@@ -207,6 +205,8 @@ class listener implements EventSubscriberInterface
 			if (sizeof($match))
 			{
 				$this->user->add_lang_ext('rmcgirr83/authorizedforurls', 'common');
+
+				$type = '';
 				if ($check_img_bbcode)
 				{
 					$type .= $this->user->lang('AUTHED_IMAGES');
@@ -216,10 +216,14 @@ class listener implements EventSubscriberInterface
 					$type .= (!empty($type)) ? ', ' .  $this->user->lang('AUTHED_EMAIL') : $this->user->lang('AUTHED_EMAIL');
 				}
 				$type .= (!empty($type)) ? ' ' . $this->user->lang('AUTHED_OR') . ' ' . $this->user->lang('AUTHED_URL') : $this->user->lang('AUTHED_URL');
-				$auth_msg = $this->user->lang('URL_UNAUTHED', $type, $match[0]);
-			}
 
-			return $auth_msg;
+				if ($return_lang_args)
+				{
+					return array('URL_UNAUTHED', $type, $match[0]);
+				}
+
+				return $this->user->lang('URL_UNAUTHED', $type, $match[0]);
+			}
 		}
 
 		return false;
