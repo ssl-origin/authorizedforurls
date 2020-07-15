@@ -17,21 +17,22 @@ class authforurl_module
 	function main($id, $mode)
 	{
 
-		global $user, $request, $template;
+		global $language, $request, $template;
 		global $config, $phpbb_container;
 
-		$user->add_lang_ext('rmcgirr83/authorizedforurls', 'acp_authforurl');
 		$this->tpl_name = 'acp_authforurl';
-		$this->page_title = $user->lang['AFU_ACP_TITLE'];
+		$this->page_title = $language->lang('AFU_ACP_TITLE');
+
 		$form_name = 'acp_afu';
 		add_form_key($form_name);
+
 		$error = '';
 
 		$config_text = $phpbb_container->get('config_text');
 
-		$authforurl_data = $config_text->get_array(array(
+		$authforurl_data = $config_text->get_array([
 			'authforurl_tlds',
-		));
+		]);
 
 		//convert the string to an array
 		$authurl_array = explode(',', trim($authforurl_data['authforurl_tlds']));
@@ -46,7 +47,7 @@ class authforurl_module
 		{
 			if (!check_form_key($form_name))
 			{
-				$error = $user->lang('FORM_INVALID');
+				$error = $language->lang('FORM_INVALID');
 			}
 
 			if (empty($error))
@@ -54,16 +55,16 @@ class authforurl_module
 				$config->set('authforurl_img_bbcode', $request->variable('authforurl_img_bbcode', false));
 				$config->set('authforurl_email', $request->variable('authforurl_email', false));
 				$config->set('authforurl_deny_post', $request->variable('authforurl_deny_post', true));
-				$authforurl_tlds = $request->variable('authforurl_tlds', '', true);
-				$config_text->set_array(array(
-					'authforurl_tlds'			=> $authforurl_tlds,
-				));
 
-				trigger_error($user->lang['AFU_SAVED'] . adm_back_link($this->u_action));
+				$config_text->set_array([
+					'authforurl_tlds'			=> $request->variable('authforurl_tlds', '', true),
+				]);
+
+				trigger_error($language->lang('AFU_SAVED') . adm_back_link($this->u_action));
 			}
 		}
 
-		$template->assign_vars(array(
+		$template->assign_vars([
 			'ERRORS'			=> $error,
 			'AFU_BBCODE'		=> $config['authforurl_img_bbcode'],
 			'AFU_EMAIL'			=> $config['authforurl_email'],
@@ -71,6 +72,6 @@ class authforurl_module
 			'AFU_TLDS'			=> $tlds,
 
 			'U_ACTION'			=> $this->u_action,
-		));
+		]);
 	}
 }

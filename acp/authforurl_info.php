@@ -17,13 +17,13 @@ class authforurl_info
 {
 	function module()
 	{
-		return array(
+		return [
 			'filename'	=> '\rmcgirr83\authorizedforurls\acp\authforurl_module',
 			'title'		=> 'AFU_ACP_TITLE',
-			'version'	=> '1.0.0-b1',
-			'modes'		=> array(
+			'version'	=> '1.0.0',
+			'modes'		=> [
 				'settings'	=> array('title' => 'AFU_CONFIG', 'auth'	=> 'ext_rmcgirr83/authorizedforurls', 'cat'	=> array('AFU_EXTENSION')),
-			),
-		);
+			],
+		];
 	}
 }

@@ -11,6 +11,12 @@
 
 namespace rmcgirr83\authorizedforurls\event;
 
+/* Ignore */
+use phpbb\auth\auth;
+use phpbb\config\config;
+use phpbb\config\db_text;
+use phpbb\language\language;
+
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -27,20 +33,20 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\config\db_text */
 	protected $config_text;
 
-	/** @var \phpbb\user */
-	protected $user;
+	/** @var \phpbb\language\language */
+	protected $language;
 
 	public function __construct(
-		\phpbb\auth\auth $auth,
-		\phpbb\config\config $config,
-		\phpbb\config\db_text $config_text,
-		\phpbb\user $user,
+		auth $auth,
+		config $config,
+		db_text $db_text,
+		language $language,
 		\rmcgirr83\topicdescription\event\listener $topicdescription = null)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
-		$this->config_text = $config_text;
-		$this->user = $user;
+		$this->db_text = $db_text;
+		$this->language = $language;
 		$this->topicdescription = $topicdescription;
 	}
 
@@ -74,7 +80,7 @@ class listener implements EventSubscriberInterface
 	public function add_permission($event)
 	{
 		$permissions = $event['permissions'];
-		$permissions['u_post_url'] = array('lang' => 'ACL_U_POST_URL', 'cat' => 'post');
+		$permissions['u_post_url'] = ['lang' => 'ACL_U_POST_URL', 'cat' => 'post'];
 		$event['permissions'] = $permissions;
 	}
 
@@ -102,7 +108,7 @@ class listener implements EventSubscriberInterface
 
 		if (!empty($check_text) && !$this->config['authforurl_deny_post'])
 		{
-			if (in_array($mode, array('post','quote','reply')))
+			if (in_array($mode, ['post','quote','reply']))
 			{
 				$data['force_visibility'] = $data['force_approved_state'] = ITEM_UNAPPROVED;
 			}
@@ -171,7 +177,7 @@ class listener implements EventSubscriberInterface
 			$check_email = $this->config['authforurl_email'];
 			$check_img_bbcode = $this->config['authforurl_img_bbcode'];
 
-			$tld_list = $this->config_text->get_array(array(
+			$tld_list = $this->db_text->get_array(array(
 				'authforurl_tlds',
 			));
 
@@ -204,25 +210,25 @@ class listener implements EventSubscriberInterface
 			// time to slap 'em up side the head
 			if (sizeof($match))
 			{
-				$this->user->add_lang_ext('rmcgirr83/authorizedforurls', 'common');
+				$this->language->add_lang('common', 'rmcgirr83/authorizedforurls');
 
 				$type = '';
 				if ($check_img_bbcode)
 				{
-					$type .= $this->user->lang('AUTHED_IMAGES');
+					$type .= $this->language->lang('AUTHED_IMAGES');
 				}
 				if ($check_email)
 				{
-					$type .= (!empty($type)) ? ', ' .  $this->user->lang('AUTHED_EMAIL') : $this->user->lang('AUTHED_EMAIL');
+					$type .= (!empty($type)) ? ', ' .  $this->language->lang('AUTHED_EMAIL') : $this->language->lang('AUTHED_EMAIL');
 				}
-				$type .= (!empty($type)) ? ' ' . $this->user->lang('AUTHED_OR') . ' ' . $this->user->lang('AUTHED_URL') : $this->user->lang('AUTHED_URL');
+				$type .= (!empty($type)) ? ' ' . $this->language->lang('AUTHED_OR') . ' ' . $this->language->lang('AUTHED_URL') : $this->language->lang('AUTHED_URL');
 
 				if ($return_lang_args)
 				{
-					return array('URL_UNAUTHED', $type, $match[0]);
+					return ['URL_UNAUTHED', $type, $match[0]];
 				}
 
-				return $this->user->lang('URL_UNAUTHED', $type, $match[0]);
+				return $this->language->lang('URL_UNAUTHED', $type, $match[0]);
 			}
 		}
 
