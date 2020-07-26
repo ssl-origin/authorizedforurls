@@ -22,7 +22,7 @@ class authforurl_info
 			'title'		=> 'AFU_ACP_TITLE',
 			'version'	=> '1.0.0',
 			'modes'		=> [
-				'settings'	=> array('title' => 'AFU_CONFIG', 'auth'	=> 'ext_rmcgirr83/authorizedforurls', 'cat'	=> array('AFU_EXTENSION')),
+				'settings'	=> ['title' => 'AFU_CONFIG', 'auth'	=> 'ext_rmcgirr83/authorizedforurls', 'cat'	=> array('AFU_EXTENSION')],
 			],
 		];
 	}

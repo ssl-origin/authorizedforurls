@@ -6,6 +6,5 @@ services:
             - '@config'
             - '@config_text'
             - '@language'
-            - '@?rmcgirr83.topicdescription.listener'            
         tags:
             - { name: event.listener }

@@ -40,14 +40,12 @@ class listener implements EventSubscriberInterface
 		auth $auth,
 		config $config,
 		db_text $db_text,
-		language $language,
-		\rmcgirr83\topicdescription\event\listener $topicdescription = null)
+		language $language)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
 		$this->db_text = $db_text;
 		$this->language = $language;
-		$this->topicdescription = $topicdescription;
 	}
 
 	/**

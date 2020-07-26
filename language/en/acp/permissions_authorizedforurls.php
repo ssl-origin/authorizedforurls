@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = array[];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -37,6 +37,6 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'ACL_U_POST_URL'		=> 'Can post URL Links in posts',
-));
+]);
