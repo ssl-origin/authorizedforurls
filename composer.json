@@ -26,7 +26,7 @@
         "phpbb/epv": "dev-master"
     },
     "extra": {
-        "display-name": "Authorized for urls",
+        "display-name": "Authorized for URLs",
         "soft-require": {
             "phpbb/phpbb": ">=3.2"
         },
