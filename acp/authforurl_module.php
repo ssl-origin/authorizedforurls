@@ -35,13 +35,13 @@ class authforurl_module
 		]);
 
 		//convert the string to an array
-		$authurl_array = explode(',', trim($authforurl_data['authforurl_tlds']));
+		$authurl_array = explode($language->lang('COMMA_SEPARATOR'), trim($authforurl_data['authforurl_tlds']));
 
 		//sort the array
 		sort($authurl_array);
 
 		// put the array back into a string
-		$tlds = implode(',', $authurl_array);
+		$tlds = implode($language->lang('COMMA_SEPARATOR'), $authurl_array);
 
 		if ($request->is_set_post('submit'))
 		{
@@ -71,7 +71,7 @@ class authforurl_module
 			'AFU_DENY_POST'		=> $config['authforurl_deny_post'],
 			'AFU_TLDS'			=> $tlds,
 
-			'L_BUY_ME_A_BEER_EXPLAIN'	=> $language->lang('BUY ME A BEER_EXPLAIN', '<a href="' . $language->lang('BUY_ME_A_BEER_URL') . '" target="_blank" rel=”noreferrer noopener”>', '</a>'),
+			'L_BUY_ME_A_BEER_EXPLAIN'	=> $language->lang('BUY ME A BEER_EXPLAIN', '<a href="https://paypal.me/RMcGirr83" target="_blank" rel=”noreferrer noopener”>', '</a>'),
 
 			'U_ACTION'			=> $this->u_action,
 		]);

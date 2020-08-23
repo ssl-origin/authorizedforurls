@@ -14,8 +14,9 @@ namespace rmcgirr83\authorizedforurls\event;
 /* Ignore */
 use phpbb\auth\auth;
 use phpbb\config\config;
-use phpbb\config\db_text;
+use phpbb\config\db_text as config_text;
 use phpbb\language\language;
+use phpbb\template\template;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -36,16 +37,38 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\language\language */
 	protected $language;
 
+	/** @var template */
+	protected $template;
+
+	/* @var \rmcgirr83\topicdescription\event\listener */
+	protected $topicdescription;
+
+	/**
+	* Constructor
+	* NOTE: The parameters of this method must match in order and type with
+	* the dependencies defined in the services.yml file for this service.
+	*
+	* @param auth			$auth			Auth object
+	* @param config			$config			Config object
+	* @param config_text	$config_text	Config text object
+	* @param language		$language		Language object
+	* @param template		$template		Template object
+	* @param \rmcgirr83\topicdescription\event\listener	$topic_description	Topic description extension
+	*/
 	public function __construct(
 		auth $auth,
 		config $config,
-		db_text $db_text,
-		language $language)
+		config_text $config_text,
+		language $language,
+		template $template,
+		\rmcgirr83\topicdescription\event\listener $topicdescription = null)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
-		$this->db_text = $db_text;
+		$this->config_text = $config_text;
 		$this->language = $language;
+		$this->template = $template;
+		$this->topicdescription = $topicdescription;
 	}
 
 	/**
@@ -57,15 +80,33 @@ class listener implements EventSubscriberInterface
 	*/
 	static public function getSubscribedEvents()
 	{
-		return array(
-			'core.permissions'						=> 'add_permission',
-			'core.posting_modify_message_text'		=> 'posting_modify_message_text',
+		return [
+			'core.acp_extensions_run_action_after'		=>	'acp_extensions_run_action_after',
+			'core.permissions'							=> 'add_permission',
+			'core.posting_modify_message_text'			=> 'posting_modify_message_text',
 			'core.posting_modify_submit_post_before'	=> 'posting_modify_submit_post_before',
-			'core.ucp_profile_modify_signature'		=> 'modify_signature',
+			'core.ucp_profile_modify_signature'			=> 'modify_signature',
 			'core.ucp_pm_compose_modify_parse_before'	=> 'modify_message_text',
 			// for topic description extension
-			'core.posting_modify_submission_errors' => 'modify_submission_errors',
-		);
+			'core.posting_modify_submission_errors' 	=> 'modify_submission_errors',
+		];
+	}
+
+	/* Display additional metdate in extension details
+	*
+	* @param $event			event object
+	* @param return null
+	* @access public
+	*/
+	public function acp_extensions_run_action_after($event)
+	{
+		if ($event['ext_name'] == 'rmcgirr83/authorizedforurls' && $event['action'] == 'details')
+		{
+			$this->template->assign_vars([
+				'L_BUY_ME_A_BEER_EXPLAIN'	=> $this->language->lang('BUY ME A BEER_EXPLAIN', '<a href="' . $this->language->lang('BUY_ME_A_BEER_URL') . '" target="_blank" rel=”noreferrer noopener”>', '</a>'),
+				'S_BUY_ME_A_BEER_AUTHORIZEDFORURLS' => true,
+			]);
+		}
 	}
 
 	/**
@@ -175,9 +216,9 @@ class listener implements EventSubscriberInterface
 			$check_email = $this->config['authforurl_email'];
 			$check_img_bbcode = $this->config['authforurl_img_bbcode'];
 
-			$tld_list = $this->db_text->get_array(array(
+			$tld_list = $this->config_text->get_array([
 				'authforurl_tlds',
-			));
+			]);
 
 			//convert the string to an array
 			$tld_list = explode(',', trim($tld_list['authforurl_tlds']));
@@ -197,7 +238,7 @@ class listener implements EventSubscriberInterface
 				$check_text = preg_replace("/\[img\s*\](.+?)\[\/img\]/i", '',$check_text);
 			}
 			// we want internal links removed
-			$check_text = preg_replace("/{$this->config['cookie_domain']}/", '',$check_text);
+			$check_text = str_ireplace($this->config['cookie_domain'], '', $check_text);
 
 			// check the whole darn thang now for any TLD's
 			// at least those that >seem< to match from the array
