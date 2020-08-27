@@ -35,13 +35,13 @@ class authforurl_module
 		]);
 
 		//convert the string to an array
-		$authurl_array = explode($language->lang('COMMA_SEPARATOR'), trim($authforurl_data['authforurl_tlds']));
+		$authurl_array = explode(', ', trim($authforurl_data['authforurl_tlds']));
 
 		//sort the array
 		sort($authurl_array);
 
 		// put the array back into a string
-		$tlds = implode($language->lang('COMMA_SEPARATOR'), $authurl_array);
+		$tlds = implode(', ', $authurl_array);
 
 		if ($request->is_set_post('submit'))
 		{

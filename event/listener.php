@@ -102,10 +102,7 @@ class listener implements EventSubscriberInterface
 	{
 		if ($event['ext_name'] == 'rmcgirr83/authorizedforurls' && $event['action'] == 'details')
 		{
-			$this->template->assign_vars([
-				'L_BUY_ME_A_BEER_EXPLAIN'	=> $this->language->lang('BUY ME A BEER_EXPLAIN', '<a href="' . $this->language->lang('BUY_ME_A_BEER_URL') . '" target="_blank" rel=”noreferrer noopener”>', '</a>'),
-				'S_BUY_ME_A_BEER_AUTHORIZEDFORURLS' => true,
-			]);
+			$this->template->assign_var('S_BUY_ME_A_BEER_AUTHORIZEDFORURLS', true);
 		}
 	}
 
