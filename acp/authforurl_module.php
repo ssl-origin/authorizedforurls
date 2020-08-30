@@ -71,8 +71,6 @@ class authforurl_module
 			'AFU_DENY_POST'		=> $config['authforurl_deny_post'],
 			'AFU_TLDS'			=> $tlds,
 
-			'L_BUY_ME_A_BEER_EXPLAIN'	=> $language->lang('BUY ME A BEER_EXPLAIN', '<a href="https://paypal.me/RMcGirr83" target="_blank" rel=”noreferrer noopener”>', '</a>'),
-
 			'U_ACTION'			=> $this->u_action,
 		]);
 	}
