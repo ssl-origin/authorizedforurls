@@ -38,13 +38,13 @@ class authforurl_module
 		$authurl_array = explode(',', $authforurl_data['authforurl_tlds']);
 
 		// remove spaces
-		$authurl_array = array_map('trim',$authurl_array);
+		$authurl_array = array_map('trim', $authurl_array);
 
 		//sort the array
 		sort($authurl_array);
 
 		// put the array back into a string
-		$authurl_array = implode(',',$authurl_array);
+		$authurl_array = implode(',', $authurl_array);
 
 		if ($request->is_set_post('submit'))
 		{
