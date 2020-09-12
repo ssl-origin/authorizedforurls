@@ -35,13 +35,16 @@ class authforurl_module
 		]);
 
 		//convert the string to an array
-		$authurl_array = explode(', ', trim($authforurl_data['authforurl_tlds']));
+		$authurl_array = explode(',', $authforurl_data['authforurl_tlds']);
+
+		// remove spaces
+		$authurl_array = array_map('trim',$authurl_array);
 
 		//sort the array
 		sort($authurl_array);
 
 		// put the array back into a string
-		$tlds = implode(', ', $authurl_array);
+		$authurl_array = implode(',',$authurl_array);
 
 		if ($request->is_set_post('submit'))
 		{
@@ -69,7 +72,7 @@ class authforurl_module
 			'AFU_BBCODE'		=> $config['authforurl_img_bbcode'],
 			'AFU_EMAIL'			=> $config['authforurl_email'],
 			'AFU_DENY_POST'		=> $config['authforurl_deny_post'],
-			'AFU_TLDS'			=> $tlds,
+			'AFU_TLDS'			=> $authurl_array,
 
 			'U_ACTION'			=> $this->u_action,
 		]);

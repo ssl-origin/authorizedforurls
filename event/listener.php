@@ -203,7 +203,7 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	public function check_text($check_text, $return_lang_args = false)
+	public function check_text($check_text)
 	{
 		if (!$this->auth->acl_get('u_post_url'))
 		{
@@ -218,16 +218,19 @@ class listener implements EventSubscriberInterface
 			]);
 
 			//convert the string to an array
-			$tld_list = explode(',', trim($tld_list['authforurl_tlds']));
+			$tld_list = explode(',', $tld_list['authforurl_tlds']);
+
+			// remove spaces
+			$tld_list = array_map('trim', $tld_list);
 
 			//convert the array back into a string
-			$disallowed_tld = implode('|',$tld_list);
+			$tld_list = implode('|', $tld_list);
 
 			// thanks for the regex tut A_Jelly_Doughnut!! :)
 			// we want emails to show
 			if (!$check_email)
 			{
-				$check_text = preg_replace("#([a-z0-9\-_]+)@(((?:www.)?\b[a-z0-9\-_]+)\.($disallowed_tld)(\.($disallowed_tld))?\b)#i",'',$check_text);
+				$check_text = preg_replace("#([a-z0-9\-_]+)@(((?:www.)?\b[a-z0-9\-_]+)\.($tld_list)(\.($tld_list))?\b)#i",'',$check_text);
 			}
 			// we want img bbcode tags to show
 			if (!$check_img_bbcode)
@@ -240,7 +243,7 @@ class listener implements EventSubscriberInterface
 			// check the whole darn thang now for any TLD's
 			// at least those that >seem< to match from the array
 			// and have not been excluded above
-			preg_match("#(([a-z0-9\-_]+)@)?([a-z]{3,6}://)?(((?:www.)?\b[a-z0-9\-_]+)\.($disallowed_tld)(\.($disallowed_tld))?\b)#i", $check_text, $match);
+			preg_match("#(([a-z0-9\-_]+)@)?([a-z]{3,6}://)?(((?:www.)?\b[a-z0-9\-_]+)\.($tld_list)(\.($tld_list))?\b)#i", $check_text, $match);
 
 			// we have a match..uhoh, someone's being naughty
 			// time to slap 'em up side the head
@@ -258,11 +261,6 @@ class listener implements EventSubscriberInterface
 					$type .= (!empty($type)) ? ', ' .  $this->language->lang('AUTHED_EMAIL') : $this->language->lang('AUTHED_EMAIL');
 				}
 				$type .= (!empty($type)) ? ' ' . $this->language->lang('AUTHED_OR') . ' ' . $this->language->lang('AUTHED_URL') : $this->language->lang('AUTHED_URL');
-
-				if ($return_lang_args)
-				{
-					return ['URL_UNAUTHED', $type, $match[0]];
-				}
 
 				return $this->language->lang('URL_UNAUTHED', $type, $match[0]);
 			}
