@@ -2,8 +2,8 @@
     "name": "rmcgirr83/authorizedforurls",
     "type": "phpbb-extension",
     "description": "A new group/user permission which allows you to specify specific groups/users to allow the posting of url links.",
-    "version": "1.0.9",
-    "time": "2020-09-12",
+    "version": "1.0.10",
+    "time": "2020-10-03",
     "keywords": [
         "phpbb",
         "extension",

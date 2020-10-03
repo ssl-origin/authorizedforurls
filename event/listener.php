@@ -243,7 +243,7 @@ class listener implements EventSubscriberInterface
 			// check the whole darn thang now for any TLD's
 			// at least those that >seem< to match from the array
 			// and have not been excluded above
-			preg_match("#(([a-z0-9\-_]+)@)?([a-z]{3,6}://)?(((?:www.)?\b[a-z0-9\-_]+)\.($tld_list)(\.($tld_list))?\b)#i", $check_text, $match);
+			preg_match_all("#(([a-z0-9\-_]+)@)?([a-z]{3,6}://)?(((?:www.)?\b[a-z0-9\-_]+)\.($tld_list)(\.($tld_list))?\b)#i", $check_text, $match);
 
 			// we have a match..uhoh, someone's being naughty
 			// time to slap 'em up side the head
@@ -262,7 +262,27 @@ class listener implements EventSubscriberInterface
 				}
 				$type .= (!empty($type)) ? ' ' . $this->language->lang('AUTHED_OR') . ' ' . $this->language->lang('AUTHED_URL') : $this->language->lang('AUTHED_URL');
 
-				return $this->language->lang('URL_UNAUTHED', $type, $match[0]);
+				$matched_url = '';
+				$last_key = array_key_last($match[0]);
+				$first_key = array_key_first($match[0]);
+				$match_count = count($match[0]);
+
+				foreach ($match[0] as $key => $value)
+				{
+					if ($key == $first_key)
+					{
+						$matched_url .= $value;
+					}
+					elseif ($match_count > 2 && $key != $last_key)
+					{
+						$matched_url .= $this->language->lang('COMMA_SEPARATOR') . $value;
+					}
+					elseif ($key == $last_key)
+					{
+						$matched_url .= $this->language->lang('AUTHED_AND') . $value;
+					}
+				}
+				return $this->language->lang('URL_UNAUTHED', $type, $matched_url);
 			}
 		}
 

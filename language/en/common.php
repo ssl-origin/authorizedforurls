@@ -45,4 +45,5 @@ $lang = array_merge($lang, [
 	'AUTHED_EMAIL'		=> 'email',
 	'AUTHED_IMAGES'		=> 'image',
 	'AUTHED_OR'			=> 'or',
+	'AUTHED_AND'		=> ' and ',
 ]);
