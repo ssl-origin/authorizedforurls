@@ -273,11 +273,11 @@ class listener implements EventSubscriberInterface
 					{
 						$matched_url .= $value;
 					}
-					elseif ($match_count > 2 && $key != $last_key)
+					else if ($match_count > 2 && $key != $last_key)
 					{
 						$matched_url .= $this->language->lang('COMMA_SEPARATOR') . $value;
 					}
-					elseif ($key == $last_key)
+					else if ($key == $last_key)
 					{
 						$matched_url .= $this->language->lang('AUTHED_AND') . $value;
 					}
