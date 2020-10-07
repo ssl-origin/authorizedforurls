@@ -247,7 +247,7 @@ class listener implements EventSubscriberInterface
 
 			// we have a match..uhoh, someone's being naughty
 			// time to slap 'em up side the head
-			if (sizeof($match))
+			if (!empty(array_keys($match[0])))
 			{
 				$this->language->add_lang('common', 'rmcgirr83/authorizedforurls');
 
