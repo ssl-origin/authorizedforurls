@@ -5,7 +5,7 @@ phpBB extension that adds a new group/user permission which allows you to specif
 
 ![Screenshot](denied.jpg)
 
-[![Build Status](https://travis-ci.org/rmcgirr83/authorizedforurls.svg?branch=master)](https://travis-ci.org/rmcgirr83/authorizedforurls)
+[![Build Status](https://travis-ci.com/rmcgirr83/authorizedforurls.svg?branch=master)](https://travis-ci.com/rmcgirr83/authorizedforurls)
 ## Installation
 
 ### 1. clone
