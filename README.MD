@@ -1,7 +1,8 @@
-Authorized for URLs
-=========================
+# ![Authorized for Urls](https://imattpro.github.io/logo/search.png "Authorized for Urls") Authorized for Urls for phpBB3
 
-phpBB extension that adds a new group/user permission which allows you to specify specific groups/users to allow the posting of url links.
+phpBB extension that adds a new group/user permission which allows you to specify specific groups/users to disallow the posting of url links.
+
+[![Build Status](https://github.com/rmcgirr83/authorizedforurls/workflows/Tests/badge.svg)](https://github.com/rmcgirr83/authorizedforurls/actions)
 
 ![Screenshot](denied.jpg)
 
