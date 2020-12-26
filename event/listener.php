@@ -203,7 +203,7 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	public function check_text($check_text)
+	public function check_text($check_text, $return_lang_args = false)
 	{
 		if (!$this->auth->acl_get('u_post_url'))
 		{
@@ -282,6 +282,12 @@ class listener implements EventSubscriberInterface
 						$matched_url .= $this->language->lang('AUTHED_AND') . $value;
 					}
 				}
+
+				if ($return_lang_args)
+				{
+					return array('URL_UNAUTHED', $type, $matched_url);
+				}
+
 				return $this->language->lang('URL_UNAUTHED', $type, $matched_url);
 			}
 		}
