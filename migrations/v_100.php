@@ -28,40 +28,83 @@ class v_100 extends \phpbb\db\migration\migration
 	*/
 	public function update_data()
 	{
-		return array(
-			// Add permission
-			array('permission.add', array('u_post_url')),
+		$data[] = array('permission.add', array('u_post_url'));
 
-			// Set permissions
-			array('permission.permission_set',array('REGISTERED','u_post_url','group')),
-			array('permission.permission_set',array('NEWLY_REGISTERED','u_post_url','group', false)),
-			array('permission.permission_set',array('ROLE_USER_NEW_MEMBER','u_post_url','role',false)),
-			array('permission.permission_set',array('ROLE_USER_STANDARD','u_post_url','role')),
-			array('permission.permission_set',array('ROLE_USER_FULL','u_post_url','role')),
-			array('permission.permission_set',array('ROLE_ADMIN_STANDARD','u_post_url','role')),
-			array('permission.permission_set',array('ROLE_ADMIN_FORUM','u_post_url','role')),
-			array('permission.permission_set',array('ROLE_ADMIN_FULL','u_post_url','role')),
-			array('permission.permission_set',array('ROLE_MOD_STANDARD','u_post_url','role')),
-			array('permission.permission_set',array('ROLE_MOD_FULL','u_post_url','role')),
+		// Populate array with role permissions
+		if ($this->role_exists('ROLE_USER_NEW_MEMBER'))
+		{
+			$data[] = array('permission.permission_set',array('ROLE_USER_NEW_MEMBER','u_post_url','role',false));
+		}
 
-			array('config_text.add', array('authforurl_tlds', $this->tlds())),
-			array('config.add', array('authforurl_img_bbcode', true)),
-			array('config.add', array('authforurl_email', true)),
-			array('module.add', array(
-				'acp',
-				'ACP_CAT_DOT_MODS',
-				'AFU_ACP_TITLE'
-			)),
+		if ($this->role_exists('ROLE_USER_STANDARD'))
+		{
+			$data[] = array('permission.permission_set',array('ROLE_USER_STANDARD','u_post_url'));
+		}
 
-			array('module.add', array(
-				'acp',
-				'AFU_ACP_TITLE',
-				array(
-					'module_basename'	=> '\rmcgirr83\authorizedforurls\acp\authforurl_module',
-					'modes'				=> array('settings'),
-				),
-			)),
-		);
+		if ($this->role_exists('ROLE_USER_FULL'))
+		{
+			$data[] = array('permission.permission_set',array('ROLE_USER_FULL','u_post_url'));
+		}
+
+		if ($this->role_exists('ROLE_ADMIN_STANDARD'))
+		{
+			$data[] = array('permission.permission_set',array('ROLE_ADMIN_STANDARD','u_post_url'));
+		}
+
+		if ($this->role_exists('ROLE_ADMIN_FORUM'))
+		{
+			$data[] = array('permission.permission_set',array('ROLE_ADMIN_FORUM','u_post_url'));
+		}
+
+		if ($this->role_exists('ROLE_ADMIN_FULL'))
+		{
+			$data[] = array('permission.permission_set',array('ROLE_ADMIN_FULL','u_post_url'));
+		}
+
+		if ($this->role_exists('ROLE_MOD_STANDARD'))
+		{
+			$data[] = array('permission.permission_set',array('ROLE_MOD_STANDARD','u_post_url'));
+		}
+
+		if ($this->role_exists('ROLE_MOD_FULL'))
+		{
+			$data[] = array('permission.permission_set',array('ROLE_MOD_FULL','u_post_url'));
+		}
+		$data[] = array('permission.permission_set',array('REGISTERED','u_post_url','group'));
+		$data[] = array('permission.permission_set',array('NEWLY_REGISTERED','u_post_url','group', false));
+		$data[] = array('config_text.add', array('authforurl_tlds', $this->tlds()));
+		$data[] = array('config.add', array('authforurl_img_bbcode', true));
+		$data[] = array('config.add', array('authforurl_email', true));
+		$data[] = array('module.add', array('acp', 'ACP_CAT_DOT_MODS', 'AFU_ACP_TITLE'));
+		$data[] = array('module.add', array(
+			'acp',
+			'AFU_ACP_TITLE',
+			array(
+				'module_basename'	=> '\rmcgirr83\authorizedforurls\acp\authforurl_module',
+				'modes'				=> array('settings'),
+			),
+		));
+
+		return $data;
+	}
+
+	/**
+	 * Checks whether the given role exists or not and adds the appropriate permission.
+	 *
+	 * @param  string		$role		The name of the role
+	 * @return bool						true if the role exists, false otherwise
+	 * @access protected
+	 */
+	protected function role_exists($role)
+	{
+		$sql = 'SELECT role_id
+				FROM ' . $this->table_prefix . "acl_roles
+				WHERE role_name = '" . $this->db->sql_escape($role) . "'";
+		$result = $this->db->sql_query_limit($sql, 1);
+		$role_id = $this->db->sql_fetchfield('role_id');
+		$this->db->sql_freeresult($result);
+
+		return (bool) $role_id;
 	}
 
 	private function tlds()
