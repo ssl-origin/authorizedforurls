@@ -25,19 +25,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class listener implements EventSubscriberInterface
 {
-	/** @var \phpbb\auth\auth */
+	/** @var auth $auth */
 	protected $auth;
 
-	/** @var \phpbb\config\config */
+	/** @var config $config */
 	protected $config;
 
-	/** @var \phpbb\config\db_text */
+	/** @var config_text  $config_text */
 	protected $config_text;
 
-	/** @var \phpbb\language\language */
+	/** @var language $language */
 	protected $language;
 
-	/** @var template */
+	/** @var template $template*/
 	protected $template;
 
 	/* @var \rmcgirr83\topicdescription\event\listener */
