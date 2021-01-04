@@ -18,8 +18,8 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
-        "phpbb/phpbb": ">=3.2.6",
+        "php": ">=7.3.0",
+        "phpbb/phpbb": ">=3.3.0",
         "composer/installers": "~1.0.0"
     },
     "require-dev": {
@@ -28,7 +28,7 @@
     "extra": {
         "display-name": "Authorized for URLs",
         "soft-require": {
-            "phpbb/phpbb": ">=3.2.6"
+            "phpbb/phpbb": ">=3.3.0"
         },
         "version-check": {
             "host": "www.phpbb.com",
