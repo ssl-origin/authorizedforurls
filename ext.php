@@ -23,8 +23,8 @@ class ext extends \phpbb\extension\base
 	 */
 	public function is_enableable()
 	{
-		$config = $this->container->get('config');
 		$enableable = (phpbb_version_compare(PHPBB_VERSION, '3.3.0', '>=') && version_compare(PHP_VERSION, '7.3.0', '>='));
+
 		return $enableable;
 	}
 }

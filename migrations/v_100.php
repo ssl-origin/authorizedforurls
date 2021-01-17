@@ -31,14 +31,13 @@ class v_100 extends \phpbb\db\migration\migration
 
 		$data[] = ['permission.add', ['u_post_url']];
 
+		$data[] = ['permission.permission_set',['REGISTERED','u_post_url','group']];
+
+		$data[] = ['permission.permission_set',['NEWLY_REGISTERED','u_post_url','group', false]];
+
 		$data[] = ['if', [
 			['permission.role_exists', ['ROLE_USER_NEW_MEMBER']],
 			['permission.permission_set', ['ROLE_USER_NEW_MEMBER', 'u_post_url', 'role', false]],
-		]];
-
-		$data[] = ['if', [
-			['permission.role_exists', ['ROLE_FORUM_NEW_MEMBER']],
-			['permission.permission_set', ['ROLE_FORUM_NEW_MEMBER', 'u_post_url', 'role', false]],
 		]];
 
 		$role_array = ['ROLE_USER_STANDARD', 'ROLE_USER_FULL', 'ROLE_ADMIN_STANDARD', 'ROLE_ADMIN_FORUM', 'ROLE_ADMIN_FULL', 'ROLE_MOD_STANDARD', 'ROLE_MOD_FULL'];
@@ -50,9 +49,6 @@ class v_100 extends \phpbb\db\migration\migration
 				['permission.permission_set', [$value,'u_post_url']],
 			]];
 		}
-
-		$data[] = ['permission.permission_set',['REGISTERED','u_post_url','group']];
-		$data[] = ['permission.permission_set',['NEWLY_REGISTERED','u_post_url','group', false]];
 
 		$data[] = ['config_text.add', ['authforurl_tlds', $this->tlds()]];
 		$data[] = ['config.add', ['authforurl_img_bbcode', true]];
@@ -109,6 +105,7 @@ class v_100 extends \phpbb\db\migration\migration
 			'vu','web','wf','ws','ye','yt','yu','za',
 			'zm','zr','zw',
 		];
+
 		$tlds = implode(",", $tlds);
 
 		return $tlds;
