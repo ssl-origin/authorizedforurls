@@ -24,7 +24,12 @@ class ext extends \phpbb\extension\base
 	public function is_enableable()
 	{
 		$enableable = (phpbb_version_compare(PHPBB_VERSION, '3.3.0', '>=') && version_compare(PHP_VERSION, '7.3.0', '>='));
-
+		if (!$enableable)
+		{
+			$user = $this->container->get('user');
+			$user->add_lang_ext('rmcgirr83/authorizedforurls', 'info_acp_authforurl');
+			trigger_error($user->lang('REQUIREMENTS_NOT_MET'), E_USER_WARNING);
+		}
 		return $enableable;
 	}
 }
